@@ -1,0 +1,17 @@
+*.exe
+*.dll
+*.o
+*.obj
+*.pdb
+*.ilk
+*.log
+*-summary.txt
+*-errors.txt
+*-leaks.txt
+*-leak-groups.txt
+*-events.jsonl
+*-ai-report.md
+*-ai-symbolized.md
+__pycache__/
+.pytest_cache/
+

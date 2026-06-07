@@ -1,0 +1,6 @@
+# One substring per line. Matching leak groups are moved to
+# "Suppressed Leak Groups" in the symbolized AI report.
+#
+# These sample suppressions hide MinGW CRT startup allocations so the sample
+# report focuses on user code.
+mingw-w64-crt/crt/crtexe.c
