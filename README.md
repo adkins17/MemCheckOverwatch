@@ -14,6 +14,7 @@ gcc -g -O0 target.c memcheck_runtime.c \
   -Wl,--wrap=realloc \
   -Wl,--wrap=free \
   -Wl,--wrap=_strdup \
+  -Wl,--wrap=strdup \
   -o target-memcheck.exe
 ```
 

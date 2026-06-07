@@ -22,12 +22,14 @@ void *__real_calloc(size_t count, size_t size);
 void *__real_realloc(void *ptr, size_t size);
 void __real_free(void *ptr);
 char *__real__strdup(const char *str);
+char *__real_strdup(const char *str);
 
 void *__wrap_malloc(size_t size);
 void *__wrap_calloc(size_t count, size_t size);
 void *__wrap_realloc(void *ptr, size_t size);
 void __wrap_free(void *ptr);
 char *__wrap__strdup(const char *str);
+char *__wrap_strdup(const char *str);
 
 typedef struct memcheck_options {
   size_t quarantine_bytes;
@@ -282,8 +284,13 @@ static void record_error(const char *kind, void *ptr, const memcheck_header *hea
   char path[PATH_SIZE];
   FILE *file;
   USHORT i;
+  void *current_stack[STACK_DEPTH_MAX];
+  USHORT current_stack_depth = 0;
   if (g_reporting) {
     return;
+  }
+  if (!header) {
+    capture_stack(current_stack, &current_stack_depth, 2);
   }
   g_reporting = 1;
   report_path(path, sizeof(path), "errors.txt");
@@ -304,7 +311,10 @@ static void record_error(const char *kind, void *ptr, const memcheck_header *hea
         }
       }
     } else {
-      fprintf(file, "\n");
+      fprintf(file, "\n  current stack:\n");
+      for (i = 0; i < current_stack_depth; ++i) {
+        fprintf(file, "    frame[%u]=%p\n", (unsigned)i, current_stack[i]);
+      }
     }
     fclose(file);
   }
@@ -631,6 +641,11 @@ char *__wrap__strdup(const char *str)
     memcpy(copy, str, length);
   }
   return copy;
+}
+
+char *__wrap_strdup(const char *str)
+{
+  return __wrap__strdup(str);
 }
 
 static void add_group(leak_group *groups, size_t group_cap, size_t *group_count, memcheck_header *header)

@@ -1,6 +1,6 @@
 CC ?= gcc
 CFLAGS ?= -g -O0 -Wall -Wextra
-WRAP_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -Wl,--wrap=free -Wl,--wrap=_strdup
+WRAP_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -Wl,--wrap=free -Wl,--wrap=_strdup -Wl,--wrap=strdup
 
 .PHONY: all clean
 
